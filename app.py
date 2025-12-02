@@ -106,47 +106,34 @@ def generate_ai_suggestions(
         "각 주제마다 학습 목표, 준비 과정, 예상 결과물 예시를 간략히 bullet 형식으로 제시해주세요. "
         "주제는 실현 가능하고 교과 연계성이 있어야 합니다."
     )
-    response = client.responses.create(
+    
+    # OpenAI Chat Completions API 사용
+    response = client.chat.completions.create(
         model=DEFAULT_OPENAI_MODEL,
-        input=[
+        messages=[
             {
                 "role": "system",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": (
-                            "당신은 중학생 수행평가를 돕는 교육 컨설턴트입니다. "
-                            "학생의 진로와 관심사에 맞는 구체적인 프로젝트 주제를 제안하고, "
-                            "현실적인 준비 과정을 안내합니다."
-                        ),
-                    }
-                ],
+                "content": (
+                    "당신은 중학생 수행평가를 돕는 교육 컨설턴트입니다. "
+                    "학생의 진로와 관심사에 맞는 구체적인 프로젝트 주제를 제안하고, "
+                    "현실적인 준비 과정을 안내합니다."
+                ),
             },
             {
                 "role": "user",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": user_prompt,
-                    }
-                ],
+                "content": user_prompt,
             },
         ],
-        max_output_tokens=600,
+        max_tokens=600,
+        temperature=0.7,
     )
-    suggestions = getattr(response, "output_text", None)
-    if suggestions:
-        return suggestions.strip()
-
-    # output_text가 없는 경우 수동으로 텍스트 추출
-    text_chunks: List[str] = []
-    for item in getattr(response, "output", []):
-        if getattr(item, "type", "") == "output_text":
-            for content_item in getattr(item, "content", []):
-                if content_item.get("type") == "output_text":
-                    text_chunks.append(content_item.get("text", ""))
-    if text_chunks:
-        return "\n\n".join(chunk.strip() for chunk in text_chunks if chunk.strip())
+    
+    # 응답에서 텍스트 추출
+    if response.choices and len(response.choices) > 0:
+        suggestions = response.choices[0].message.content
+        if suggestions:
+            return suggestions.strip()
+    
     raise RuntimeError("AI 응답을 해석할 수 없습니다. 잠시 후 다시 시도해주세요.")
 
 

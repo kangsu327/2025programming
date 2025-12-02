@@ -50,10 +50,30 @@ export OPENAI_API_KEY="sk-..."
 - 기본 모델은 `gpt-4o-mini`이며, 다른 모델을 쓰고 싶다면 `OPENAI_MODEL` 환경변수로 지정하세요.
 - API 키가 설정되지 않은 경우, AI 주제 추천 기능은 비활성화되지만 다른 기능은 정상 작동합니다.
 
-### 2. 애플리케이션 실행
+### 3. 애플리케이션 실행
 ```bash
 streamlit run app.py
 ```
+
+## Streamlit Cloud 배포
+
+### 배포 방법
+1. GitHub에 저장소를 푸시합니다.
+2. [Streamlit Cloud](https://share.streamlit.io/)에 로그인합니다.
+3. "New app"을 클릭하고 저장소를 선택합니다.
+4. Main file path를 `app.py`로 설정합니다.
+5. "Deploy!"를 클릭합니다.
+
+### Streamlit Cloud에서 OpenAI API 키 설정
+1. Streamlit Cloud 대시보드에서 앱을 선택합니다.
+2. "Settings" → "Secrets" 메뉴로 이동합니다.
+3. 다음 형식으로 secrets를 추가합니다:
+   ```toml
+   OPENAI_API_KEY = "sk-your-actual-api-key-here"
+   ```
+4. "Save"를 클릭하면 앱이 자동으로 재배포됩니다.
+
+**중요:** Streamlit Cloud에서는 `.streamlit/secrets.toml` 파일이 작동하지 않습니다. 반드시 Streamlit Cloud의 Secrets 관리 페이지에서 설정해야 합니다.
 
 ## 사용 방법
 
