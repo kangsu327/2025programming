@@ -24,13 +24,31 @@ pip install -r requirements.txt
 ```
 
 ### 2. (선택) OpenAI API 키 설정
-- 환경변수로 설정  
-  ```bash
-  setx OPENAI_API_KEY "sk-..."   # Windows PowerShell
-  export OPENAI_API_KEY="sk-..." # macOS / Linux
-  ```
-- 또는 Streamlit `secrets.toml`에 `OPENAI_API_KEY`를 추가하면 됩니다.
+AI 주제 추천 기능을 사용하려면 OpenAI API 키가 필요합니다.
+
+**방법 1: Streamlit secrets.toml 파일 사용 (권장)**
+1. `.streamlit/secrets.toml` 파일을 엽니다.
+2. `YOUR_API_KEY_HERE`를 실제 OpenAI API 키로 교체합니다.
+   ```toml
+   OPENAI_API_KEY = "sk-your-actual-api-key-here"
+   ```
+3. API 키는 [OpenAI Platform](https://platform.openai.com/api-keys)에서 발급받을 수 있습니다.
+
+**방법 2: 환경변수로 설정**
+```bash
+# Windows PowerShell
+$env:OPENAI_API_KEY = "sk-..."
+
+# Windows CMD
+setx OPENAI_API_KEY "sk-..."
+
+# macOS / Linux
+export OPENAI_API_KEY="sk-..."
+```
+
+**참고:**
 - 기본 모델은 `gpt-4o-mini`이며, 다른 모델을 쓰고 싶다면 `OPENAI_MODEL` 환경변수로 지정하세요.
+- API 키가 설정되지 않은 경우, AI 주제 추천 기능은 비활성화되지만 다른 기능은 정상 작동합니다.
 
 ### 2. 애플리케이션 실행
 ```bash
